@@ -1,0 +1,78 @@
+# ===========================
+# Java / Maven
+# ===========================
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+hs_err_pid*
+
+# Maven wrapper
+!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+
+# ===========================
+# Spring Boot
+# ===========================
+spring-shell.log
+application-local.yml
+application-local.yaml
+
+# ===========================
+# IntelliJ IDEA
+# ===========================
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# ===========================
+# VS Code
+# ===========================
+.vscode/
+
+# ===========================
+# Eclipse
+# ===========================
+.project
+.classpath
+.settings/
+bin/
+
+# ===========================
+# Gatling reports
+# ===========================
+order-service/src/test/resources/gatling/results/
+
+# ===========================
+# Java Flight Recorder
+# ===========================
+*.jfr
+
+# ===========================
+# Docker
+# ===========================
+docker-compose.override.yml
+
+# ===========================
+# OS files
+# ===========================
+.DS_Store
+Thumbs.db
+*.swp
+
+# ===========================
+# LaTeX
+# ===========================
+*.aux
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+*.toc
+*.pdf
+*.tex
+
