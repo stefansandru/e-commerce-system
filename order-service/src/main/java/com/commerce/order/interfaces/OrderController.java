@@ -25,6 +25,7 @@ public class OrderController {
         return ResponseEntity.ok(new CheckoutResponse(orderId.toString()));
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public ResponseEntity<CheckoutResponse> checkoutFallback(String idempotencyKey, CheckoutRequest request,
             Throwable t) {
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();

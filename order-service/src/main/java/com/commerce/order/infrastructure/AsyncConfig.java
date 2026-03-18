@@ -1,23 +1,27 @@
 package com.commerce.order.infrastructure;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 @Configuration
 @EnableAsync
-public class AsyncConfig {
+@EnableScheduling
+public class AsyncConfig implements SchedulingConfigurer {
 
-    @Bean(name = "outboxScheduler")
-    public ThreadPoolTaskScheduler outboxScheduler() {
-        // Dedicated thread pool for the outbox relay to prevent background tasks
-        // from exhausting the default pool or competing with request threads
+    @Override
+    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+        // Wire all @Scheduled methods to use this dedicated 2-thread pool
+        // instead of Spring's default single-threaded scheduler.
+        // This prevents the OutboxRelay from blocking other scheduled tasks
+        // and prevents background threads from competing with request threads.
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(2);
         scheduler.setThreadNamePrefix("outbox-relay-");
         scheduler.initialize();
-        return scheduler;
+        taskRegistrar.setTaskScheduler(scheduler);
     }
 }

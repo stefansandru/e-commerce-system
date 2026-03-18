@@ -22,11 +22,11 @@ public class PaymentEventProcessor {
     private static final Logger log = LoggerFactory.getLogger(PaymentEventProcessor.class);
 
     private final ProcessedEventRepository processedEventRepository;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
     public PaymentEventProcessor(ProcessedEventRepository processedEventRepository,
-            KafkaTemplate<String, Object> kafkaTemplate, ObjectMapper objectMapper) {
+            KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
         this.processedEventRepository = processedEventRepository;
         this.kafkaTemplate = kafkaTemplate;
         this.objectMapper = objectMapper;
@@ -82,14 +82,15 @@ public class PaymentEventProcessor {
                     Instant.now());
         }
 
-        kafkaTemplate.send("payment_events", event.orderId().toString(), paymentEvent);
+        String jsonPayload = objectMapper.writeValueAsString(paymentEvent);
+        kafkaTemplate.send("payment_events", event.orderId().toString(), jsonPayload);
         log.info("Published payment event: {}", paymentEvent.getClass().getSimpleName());
 
         // Intentionally emit a duplicate 10% of the time to demonstrate idempotency
         // downstream
         if (Math.random() < 0.1) {
             log.warn("INTENTIONALLY EMITTING DUPLICATE PAYMENT EVENT for order {}", event.orderId());
-            kafkaTemplate.send("payment_events", event.orderId().toString(), paymentEvent);
+            kafkaTemplate.send("payment_events", event.orderId().toString(), jsonPayload);
         }
     }
 }
