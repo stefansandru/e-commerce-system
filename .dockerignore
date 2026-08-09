@@ -1,0 +1,29 @@
+# Build output
+**/target/
+**/build/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+**/Dockerfile
+docker-compose*.yml
+
+# Logs
+*.log
+
+# Test reports
+**/surefire-reports/
+**/gatling/
